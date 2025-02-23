@@ -2,6 +2,7 @@ package org.example.steamgameservice.controller;
 
 import org.example.steamgameservice.entity.Game;
 import org.example.steamgameservice.repository.GameRepository;
+import org.example.steamgameservice.service.GameService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,11 @@ import java.util.Optional;
 public class GameController {
 
     private final GameRepository gameRepository;
+    private final GameService gameService;
 
-    public GameController(GameRepository gameRepository) {
+    public GameController(GameRepository gameRepository, GameService gameService) {
         this.gameRepository = gameRepository;
+        this.gameService = gameService;
     }
 
     // Create a new game
@@ -65,6 +68,11 @@ public class GameController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/recomendations")
+    public List<Game> getRecommendedGames() {
+        return gameService.getTopRatedGames();
     }
 
 }
